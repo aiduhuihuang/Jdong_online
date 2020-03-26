@@ -1,0 +1,75 @@
+{% extends "user_base.html" %}
+{% block title %}
+    我的消息- Jdong在线学习网
+{% endblock %}
+{% block custom %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/index/">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>我的消息</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block right_content %}
+    <div class="right" >
+		<div class="personal_des Releasecont">
+			<div class="head">
+				<h1>我的消息</h1>
+			</div>
+
+		</div>
+		<div class="personal_des permessage">
+			<div class="head">
+				<ul class="tab_header messagehead">
+					<li class="active"><a href="/user/message/">个人消息</a> </li>
+				</ul>
+
+
+			</div>
+			<div class="messagelist">
+                 {% for mes in mes_obj.object_list %}
+                    <div class="messages">
+                        <div class="fr">
+                            <div class="top"><span class="fl time">{{ mes.add_time | date:"Y-m-d H:i:s"}}</span><span class="fr btn foldbtn"></span></div>
+                            <h3>
+                                {{ mes.title }}
+                            </h3>
+                            &nbsp;&nbsp;<p>{{ mes.message }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+			</div>
+
+
+			 <div class="pageturn">
+                 <ul class="pagelist">
+                {% if mes_obj.has_previous %}
+                    <li class="long">
+                      <a href="?{{ mes_obj.previous_page_number.querystring }}">上一页</a>
+                    </li>
+                {% endif %}
+                {% for page in mes_obj.pages %}
+                  {% if page %}
+                      {% ifequal page mes_obj.number %}
+                          <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                      {% else %}
+                          <li><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                      {% endifequal %}
+                  {% else %}
+                     <li class="none"><a href="">...</a></li>
+                  {% endif %}
+                  {% endfor %}
+                  {% if mes_obj.has_next %}
+                      <li class="long">
+                         <a href="?{{ mes_obj.next_page_number.querystring }}" >下一页</a>
+                      </li>
+                  {% endif %}
+            </ul>
+            </div>
+		</div>
+
+	</div>
+{% endblock %}

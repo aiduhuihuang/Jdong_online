@@ -1,0 +1,55 @@
+{% extends "user_base.html" %}
+
+{% block title %}
+    我的课程- Jdong在线学习网
+{% endblock %}
+{% block custom %}
+     <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/index/">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>我的课程</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block right_content %}
+     <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的课程</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+                <div class="companycenter">
+                    <div class="group_list brief">
+                        {% if mycourse %}
+                            {% for co in mycourse %}
+                                 <div class="module1_5 box">
+                                <a href="/course/detail/{{ co.course.id }}/">
+                                    <img width="214" height="190"  src="/static/{{ co.course.image }}"/>
+                                </a>
+                                <div class="des">
+                                    <a href="course-detail.html"><h2>{{ co.course.name }}</h2></a>
+                                    <span class="fl">课时：<i class="key">{% widthratio co.course.learn_times 60 1 %}</i>小时</span>
+                                    <span class="fr">学习人数：{{ co.course.students }}</span>
+                                </div>
+                                <div class="bottom">
+                                    <span class="fl">{{ co.course.courseorg.name }}</span>
+                                    <span class="star fr  notlogin" data-favid="15">{{ co.course.fav_nums }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                        <div class="module1_5 box">
+                             <h2 style="color: red">暂时学习课程</h2>
+                        </div>
+                        {% endif %}
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+   

@@ -1,0 +1,60 @@
+{% extends "user_base.html" %}
+{% block title %}
+    我的收藏- Jdong在线学习网
+{% endblock %}
+{% block custom %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/index/">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>我的收藏</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block right_content %}
+     <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+                <div class="head">
+                    <ul class="tab_header messagehead">
+                        <li {%  if key == "org" %}class="active"{% endif %}><a href="/users/favorite?key=org">课程机构</a> </li>
+                        <li {%  if key == "teacher" %}class="active"{% endif %}><a href="/users/favorite?key=teacher">授课教师 </a></li>
+                        <li {%  if key %} {% else %}class="active"{% endif %}><a href="/users/favorite/">公开课程</a></li>
+                    </ul>
+
+                </div>
+                <div class="companycenter">
+                    <div class="group_list brief">
+                        {% if list_obj %}
+                            {% for course in list_obj %}
+                                 <div class="module1_5 box">
+                            <a href="/course/detail/{{ course.id }}">
+                                <img width="214" height="190" src="/static/{{ course.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="/course/detail/{{ course.id }}"><h2>{{ course.name }}</h2></a>
+                                <span class="fl">时长：<i class="key">{% widthratio course.learn_times 60 1 %}</i>小时</span>
+                                <span class="fr">学习人数：{{ course.students }}</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">{{ course.courseorg.name }}</span>
+                                <a href="/users/fav_delete?favtype=1&favid={{ course.id }}"><span class="delete-group fr jsDeleteFav_course" data-favid="12"></span></a>
+                            </div>
+                        </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="margin-left: 20px;margin-top: 30px">
+                                <h1 style="color: red">暂无课程收藏记录</h1>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "user_base.html" %}
+
+{% block title %}
+    个人信息- Jdong在线学习网
+{% endblock %}
+{% block custom %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/index/">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>个人信息</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block right_content %}
+     <div class="right">
+		<div class="personal_des ">
+			<div class="head" style="border:1px solid #eaeaea;">
+				<h1>个人信息</h1>
+			</div>
+			<div class="inforcon">
+				<div class="left" style="width:242px;">
+                    <iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
+                    <form class="clearfix" id="jsAvatarForm" enctype="multipart/form-data" autocomplete="off" method="post" action="/users/images/" target='frameFile'>
+                        {% csrf_token %}
+                        <label class="changearea" for="avatarUp">
+                            <span id="avatardiv" class="pic">
+                                <img width="100" height="100" class="js-img-show" id="avatarShow" src="/static/{{ user_obj.image }}"/>
+                            </span>
+                            <span class="fl upload-inp-box" style="margin-left:70px;">
+{#                                <span class="button btn-green btn-w100" id="jsAvatarBtn">修改头像</span>#}
+                                <input type="file" name="image" id="avatarUp"  class="js-img-up"/>
+                            </span>
+                        </label>
+                         <input type="submit" class="button btn-green btn-w100" name="btnimage" onclick="uploadimg()" value="保存头像"/>
+                    </form>
+				</div>
+				<form class="perinform" id="jsEditUserForm" autocomplete="off" method="post" action="/users/info/">
+                    {% csrf_token %}
+					<ul class="right">
+						<li>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：
+                           <input type="text" name="nick_name" id="nick_name" value="{{ user_obj.nick_name }}" maxlength="10">
+                            <i class="error-tips"></i>
+                        </li>
+						<li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="birth_day" style="font-size: 20px" name="birday" value="{{ user_obj.birthday|date:'Y-m-d' }}"/>
+                            <i class="error-tips"></i>
+						</li>
+						<li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="gender" value="1" {% if  user_obj.gender == 1 %}checked="checked" {% endif %} >男</label>
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="0" {% if  user_obj.gender == 0 %}checked="checked" {% endif %}>女</label>
+						</li>
+						<li class="p_infor_city">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
+                            <input type="text" name="address" id="address" placeholder="请输入你的地址" value="{{ user_obj.address }}" maxlength="10">
+						    <i class="error-tips"></i>
+                        </li>
+                        <li>QQ&nbsp;号&nbsp;码：
+                            <input type="text" name="qqnum" id="qqnum" oninput = "value=value.replace(/[^\d]/g,'')" value="{{ user_obj.QQnum }}" maxlength="15">
+                        </li>
+						<li>手&nbsp;&nbsp;机&nbsp;&nbsp;号：
+                            <input type="text" name="mobile" id="mobile"  oninput = "value=value.replace(/[^\d]/g,'')" value="{{ user_obj.mobile }}" maxlength="11">
+                        </li>
+						<li class="button heibtn">
+							<input type="submit" id="jsEditUserBtn" value="保存信息">
+						</li>
+                        <li><p style="color: red;">{{ message }}</p></li>
+					</ul>
+				</form>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+
+    <script>
+        //ajax局部请求修改头像进行刷新
+        function uploadimg() {
+            var img_file=$("#avatarUp")[0].files[0];//获取file对象
+            console.log(11111);
+            console.log(img_file);
+            var reader_file=new FileReader();//读取图片内容
+            reader_file.readAsDataURL(img_file);
+            reader_file.onload = function (ev) {
+                $('#avatarShow').attr('src', ev.target.result);
+                var formdata = new FormData();
+                formdata.append('img_name', img_file.name);
+                formdata.append('img_file', img_file);
+                formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                console.log(formdata);
+                $.ajax({
+                  url: '/users/images/',
+                  type: 'POST',
+                  data: formdata,
+                  {# processData：默认值是True，含义就是jQuery会对参数进行编码，让其转化为一个查询字符串。如果为FALSE，意思就是不需要jQuery对data: formdata这个数据做任何处理。 #}
+                  {# 查询字符串：一般出现在GET请求中，username='123'&password='456' #}
+                  processData: false,
+                  {# contentType: 该字段指的是此次请求携带的数据是什么累心数据。字段的默认值application/x-www-form-urlencoded。把它的值设置false，目的就是希望不使用默认的值对formdata进行转换。 #}
+                  contentType: false,
+                  success: function(data) {
+                    alert(data);
+                  }
+                });
+            }
+
+        }
+        //修改用户资料信息
+
+    </script>
+
+{% endblock %}

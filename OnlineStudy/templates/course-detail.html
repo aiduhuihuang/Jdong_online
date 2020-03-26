@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}
+    公开课列表 - Jdong在线学习网
+{% endblock %}
+{% block coustom_first %}
+    <section>
+	    <div class="wp">
+		<div class="crumbs">
+			<ul>
+				<li><a href="/index/">首页</a>></li>
+                <li><a href="/course/list/">公开课程</a>></li>
+				<li>课程详情</li>
+			</ul>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+{% block content %}
+
+    <section>
+	<div class="wp">
+		<div class="groupPurchase_detail detail">
+			<div class="toppro">
+				<div class="left">
+					<div class="picbox">
+						<div class="tb-booth tb-pic">
+							<img width="440" height="445" src="/static/{{ course_obj.image }}" class="jqzoom" />
+						</div>
+
+					</div>
+					<div class="des">
+						<h1 title="{{ course_obj.name }}体验开始了">{{ course_obj.name }}</h1>
+						<span class="key">{{ course_obj.desription }}</span>
+						<div class="prize">
+							<span class="fl">难度：<i class="key">{{ course_obj.get_degree_display }}</i></span>
+							<span class="fr">学习人数：{{ course_obj.students }}</span>
+						</div>
+						<ul class="parameter">
+							<li><span class="pram word3">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长：</span><span>{% widthratio course_obj.learn_times 60 1 %}</span> 小时</li>
+                            <li><span class="pram word3">章&nbsp;节&nbsp;数：</span><span>{{ course_obj.lesson_set.all.count }}</span></li>
+                            <li><span class="pram word3">点&nbsp;击&nbsp;量：</span><span>{{ course_obj.click_total }}</span></li>
+                            <li><span class="pram word3">课程类别：</span><span title="">{{ course_obj.catory.name }}</span></li>
+                            <li class="piclist"><span class="pram word4">学习用户：<i style="color: red;font-size: 18px;font-weight: bold">{{ course_obj.usercourse_set.count }}</i> 人</span>
+                                {% for u_c in course_obj.usercourse_set.all %}
+                                    {% if forloop.counter <= 6 %}
+                                      &nbsp;<span class="pic"><img width="40" height="40" src="/static/{{ u_c.user.image }}"/></span>
+                                    {% endif %}
+                                {% endfor %}
+							</li>
+						</ul>
+						<div class="btns">
+							<div class="btn colectgroupbtn"  id="jsLeftBtn" onclick="add_favs(1,{{ course_obj.id }})">
+                                  {% if cour_fav %}已收藏{% else %}添加收藏{% endif %}
+                            </div>
+                                <div class="buy btn"><a style="color: white" href="/course/video/{{ course_obj.id }}">开始学习</a></div>
+						</div>
+					</div>
+                    <div class="group-share-box">
+                        <div class="bdsharebuttonbox"
+                             data-text="django开始了"
+                             data-desc="我在#慕课网#发现了"
+                             data-comment=""
+                             data-url="/group/groupdetail/15/">
+                            <span class="fl">分享到：</span>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                            <a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
+                            <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+                            <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+                            <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+                            <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+                        </div>
+                    </div>
+				</div>
+				<div class="right">
+					<div class="head">
+						<h1>授课机构</h1>
+						<p>世界名校，课程权威</p>
+					</div>
+					<div class="pic">
+                        <a href="/org/orghome/{{ course_obj.courseorg.id }}">
+                            <img width="150" height="80" src="/static/{{ course_obj.courseorg.image }}"/>
+                        </a>
+                    </div>
+					<a href="/org/orghome/{{ course_obj.courseorg.id }}">
+                        <h2 class="center" title="{{ course_obj.courseorg.name }}">{{ course_obj.courseorg.name }}</h2>
+                    </a>
+					<div class="btn  notlogin
+					     "data-favid="14" id="jsRightBtn" onclick="add_favs(2,{{ course_obj.courseorg.id }})">
+                         {% if user_fav %}已收藏{% else %}添加收藏{% endif %}
+                    </div>
+					<div class="clear">
+						<ul>
+                            <li>
+                                <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course_obj.courseorg.course_set.all.count }}</span>
+                            </li>
+                            <li>
+                                <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course_obj.courseorg.teacher_set.all.count }}</span>
+                            </li>
+							<li>所在地区：&nbsp;&nbsp;{{ course_obj.courseorg.city.name }}</li>
+							<li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
+                                &nbsp;&nbsp;
+								    <img title="金牌机构", src="/static/images/gold.png"/>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+    <section>
+	<div class="wp">
+		<div class="list groupPurchase_detail_pro">
+			<div class="left layout">
+				<div class="head">
+					<ul class="tab_header">
+						<li class="active">课程详情</li>
+					</ul>
+				</div>
+				<div class="tab_cont tab_cont1">
+                    {{ course_obj.detail }}
+				</div>
+				<div class="tab_cont tab_cont2" >
+					<div class="comment">
+						<div class="comenlist">
+
+	                    </div>
+					</div>
+				</div>
+			</div>
+			<div class="right layout">
+				<div class="head">相关课程推荐</div>
+                <div class="group_recommend">
+                    {% for c_last in tag_obj%}
+                             <dl>
+                            <dt>
+                                <a target="_blank" href="/course/detail/{{ c_last.id }}">
+                                    <img width="240" height="220"  src="/static/{{ c_last.image }}"/>
+                                </a>
+                            </dt>
+                            <dd>
+                                <a target="_blank" href="/course/detail/{{ c_last.id }}"><h2>{{ c_last.name }}</h2></a>
+                                <span class="fl">学习时长：<i class="key">{% widthratio c_last.learn_times 60 1 %}</i> 小时</span>
+                            </dd>
+                        </dl>
+                    {% endfor %}
+
+                </div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block script %}
+    <script>
+        //收藏和取消收藏
+        function add_favs (fav_type,data_id) {
+            var type_id=fav_type;
+            var id=data_id;
+            var send_data = {
+                "fav_id":id,
+                "fav_type": type_id,
+                "csrfmiddlewaretoken": "{{ csrf_token }}"
+            };
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url:"/org/add_fav/",
+                data:send_data,
+                async: true,
+                success: function(data) {
+                    if (fav_type == 2) //代表是增加的机构
+                    {
+                        if (data["status"] == "1")
+                            $("#jsRightBtn").text("取消收藏");
+                        else
+                            $("#jsRightBtn").text("添加收藏");
+                    }
+                    else if (fav_type==1)//代表增加的是课程
+                    {
+                        if (data["status"] == "1")
+                            $("#jsLeftBtn").text("取消收藏");
+                        else
+                            $("#jsLeftBtn").text("添加收藏");
+                    }
+
+                },
+                error:function (error) {
+
+                }
+             });
+        }
+    </script>
+{% endblock %}
